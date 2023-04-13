@@ -106,6 +106,7 @@ namespace Monogame_Lesson_3___Animation
             if (creamTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || creamTribbleRect.Top < 0)
                 tribbleCreamSpeed.Y *= -1;
                 tribbleCoo.Play();
+
             orangeTribbleRect.X += (int)tribbleOrangeSpeed.X;
             orangeTribbleRect.Y += (int)tribbleOrangeSpeed.Y;
             if (orangeTribbleRect.Right > _graphics.PreferredBackBufferWidth || orangeTribbleRect.Left < 0)
