@@ -32,8 +32,7 @@ namespace Monogame_Lesson_3___Animation
         int randomY3;
         int randomX4;
         int randomY4;
-        int inflateX;
-        int inflateY;      
+        SoundEffect tribbleCoo;     
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -68,9 +67,7 @@ namespace Monogame_Lesson_3___Animation
             tribbleCreamSpeed = new Vector2 (0, 2);
             orangeTribbleRect = new Rectangle(randomX4, randomY4, 100, 100);
             tribbleOrangeSpeed = new Vector2(2, 4);
-            spaceshipRect = new Rectangle(0, 0, 803, 603);
-            inflateX = 1;
-            inflateY = 1;
+            spaceshipRect = new Rectangle(0, 0, 803, 603);         
 
             base.Initialize();
         }
@@ -84,6 +81,7 @@ namespace Monogame_Lesson_3___Animation
             tribbleCreamTexture = Content.Load<Texture2D>("tribbleCream");
             tribbleOrangeTexture = Content.Load<Texture2D>("tribbleOrange");
             spaceshipTexture = Content.Load<Texture2D>("spaceship background");
+            tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
         }
 
         protected override void Update(GameTime gameTime)
@@ -107,10 +105,7 @@ namespace Monogame_Lesson_3___Animation
             creamTribbleRect.Y += (int)tribbleCreamSpeed.Y;
             if (creamTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || creamTribbleRect.Top < 0)
                 tribbleCreamSpeed.Y *= -1;
-                //inflateX *= -1;
-                //inflateY *= -1;           
-                creamTribbleRect.Inflate(inflateX * -1, inflateY * -1);
-
+                tribbleCoo.Play();
             orangeTribbleRect.X += (int)tribbleOrangeSpeed.X;
             orangeTribbleRect.Y += (int)tribbleOrangeSpeed.Y;
             if (orangeTribbleRect.Right > _graphics.PreferredBackBufferWidth || orangeTribbleRect.Left < 0)
