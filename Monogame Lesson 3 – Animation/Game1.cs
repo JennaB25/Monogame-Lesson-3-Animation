@@ -32,7 +32,8 @@ namespace Monogame_Lesson_3___Animation
         int randomY3;
         int randomX4;
         int randomY4;
-        SoundEffect tribbleCoo;     
+        SoundEffect tribbleCoo;
+        SoundEffectInstance tribbleCooSEI;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -67,7 +68,7 @@ namespace Monogame_Lesson_3___Animation
             tribbleCreamSpeed = new Vector2 (0, 2);
             orangeTribbleRect = new Rectangle(randomX4, randomY4, 100, 100);
             tribbleOrangeSpeed = new Vector2(2, 4);
-            spaceshipRect = new Rectangle(0, 0, 803, 603);         
+            spaceshipRect = new Rectangle(0, 0, 803, 603);
 
             base.Initialize();
         }
@@ -82,11 +83,14 @@ namespace Monogame_Lesson_3___Animation
             tribbleOrangeTexture = Content.Load<Texture2D>("tribbleOrange");
             spaceshipTexture = Content.Load<Texture2D>("spaceship background");
             tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
+            tribbleCooSEI = tribbleCoo.CreateInstance();
+            tribbleCooSEI.Pause();
+
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))               
                 Exit();
                     
             greyTribbleRect.X += (int)tribbleGreySpeed.X;
@@ -104,9 +108,11 @@ namespace Monogame_Lesson_3___Animation
             creamTribbleRect.X += (int)tribbleCreamSpeed.X;
             creamTribbleRect.Y += (int)tribbleCreamSpeed.Y;
             if (creamTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || creamTribbleRect.Top < 0)
+            {
                 tribbleCreamSpeed.Y *= -1;
-                tribbleCoo.Play();
-
+                tribbleCooSEI.Play();
+            }
+                                     
             orangeTribbleRect.X += (int)tribbleOrangeSpeed.X;
             orangeTribbleRect.Y += (int)tribbleOrangeSpeed.Y;
             if (orangeTribbleRect.Right > _graphics.PreferredBackBufferWidth || orangeTribbleRect.Left < 0)
