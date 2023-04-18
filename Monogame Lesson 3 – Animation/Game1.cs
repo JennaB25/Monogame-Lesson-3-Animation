@@ -4,12 +4,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Monogame_Lesson_3___Animation
 {
     public class Game1 : Game
     {
         Random generator = new Random();
+        Texture2D tribbleIntroTexture;
         Texture2D tribbleGreyTexture;
         Rectangle greyTribbleRect;
         Vector2 tribbleGreySpeed;
@@ -34,6 +36,15 @@ namespace Monogame_Lesson_3___Animation
         int randomY4;
         SoundEffect tribbleCoo;
         SoundEffectInstance tribbleCooSEI;
+        private SpriteFont instructFont;
+        enum Screen
+        {
+            Intro,
+            TribbleYard,
+            End
+        }
+        Screen screen;
+        MouseState mouseState;
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
@@ -69,6 +80,7 @@ namespace Monogame_Lesson_3___Animation
             orangeTribbleRect = new Rectangle(randomX4, randomY4, 100, 100);
             tribbleOrangeSpeed = new Vector2(2, 4);
             spaceshipRect = new Rectangle(0, 0, 803, 603);
+            screen = Screen.Intro;
 
             base.Initialize();
         }
@@ -77,12 +89,14 @@ namespace Monogame_Lesson_3___Animation
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            instructFont = Content.Load<SpriteFont>("Instructions");
             tribbleGreyTexture = Content.Load<Texture2D>("tribbleGrey");
             tribbleBrownTexture = Content.Load<Texture2D>("tribbleBrown");
             tribbleCreamTexture = Content.Load<Texture2D>("tribbleCream");
             tribbleOrangeTexture = Content.Load<Texture2D>("tribbleOrange");
             spaceshipTexture = Content.Load<Texture2D>("spaceship background");
             tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
+            tribbleIntroTexture = Content.Load<Texture2D>("tribble_intro");
             tribbleCooSEI = tribbleCoo.CreateInstance();
             tribbleCooSEI.Pause();
 
@@ -90,35 +104,53 @@ namespace Monogame_Lesson_3___Animation
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))               
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-                    
-            greyTribbleRect.X += (int)tribbleGreySpeed.X;
-            greyTribbleRect.Y += (int)tribbleGreySpeed.Y;
-            if (greyTribbleRect.Right > _graphics.PreferredBackBufferWidth || greyTribbleRect.Left < 0)               
-                tribbleGreySpeed.X *= -1;               
-            if (greyTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || greyTribbleRect.Top < 0)              
-                tribbleGreySpeed.Y *= -1;    
-            
-            brownTribbleRect.X += (int)tribbleBrownSpeed.X;
-            brownTribbleRect.Y += (int)tribbleBrownSpeed.Y;
-            if (brownTribbleRect.Right > (_graphics.PreferredBackBufferWidth + 100) || brownTribbleRect.Left < -100)
-                brownTribbleRect.X = -100;     
-            
-            creamTribbleRect.X += (int)tribbleCreamSpeed.X;
-            creamTribbleRect.Y += (int)tribbleCreamSpeed.Y;
-            if (creamTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || creamTribbleRect.Top < 0)
+
+            mouseState = Mouse.GetState();
+
+            if (screen == Screen.Intro)
             {
-                tribbleCreamSpeed.Y *= -1;
-                tribbleCooSEI.Play();
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                    screen = Screen.TribbleYard;
+
             }
-                                     
-            orangeTribbleRect.X += (int)tribbleOrangeSpeed.X;
-            orangeTribbleRect.Y += (int)tribbleOrangeSpeed.Y;
-            if (orangeTribbleRect.Right > _graphics.PreferredBackBufferWidth || orangeTribbleRect.Left < 0)
-                tribbleOrangeSpeed.X *= -1;
-            if (orangeTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || orangeTribbleRect.Top < 0)
-                tribbleOrangeSpeed.Y *= -1;           
+            else if (screen == Screen.TribbleYard)
+            {
+                greyTribbleRect.X += (int)tribbleGreySpeed.X;
+                greyTribbleRect.Y += (int)tribbleGreySpeed.Y;
+                if (greyTribbleRect.Right > _graphics.PreferredBackBufferWidth || greyTribbleRect.Left < 0)
+                    tribbleGreySpeed.X *= -1;
+                if (greyTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || greyTribbleRect.Top < 0)
+                    tribbleGreySpeed.Y *= -1;
+
+                brownTribbleRect.X += (int)tribbleBrownSpeed.X;
+                brownTribbleRect.Y += (int)tribbleBrownSpeed.Y;
+                if (brownTribbleRect.Right > (_graphics.PreferredBackBufferWidth + 100) || brownTribbleRect.Left < -100)
+                    brownTribbleRect.X = -100;
+
+                creamTribbleRect.X += (int)tribbleCreamSpeed.X;
+                creamTribbleRect.Y += (int)tribbleCreamSpeed.Y;
+                if (creamTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || creamTribbleRect.Top < 0)
+                {
+                    tribbleCreamSpeed.Y *= -1;
+                    tribbleCooSEI.Play();
+                }
+
+                orangeTribbleRect.X += (int)tribbleOrangeSpeed.X;
+                orangeTribbleRect.Y += (int)tribbleOrangeSpeed.Y;
+                if (orangeTribbleRect.Right > _graphics.PreferredBackBufferWidth || orangeTribbleRect.Left < 0)
+                    tribbleOrangeSpeed.X *= -1;
+                if (orangeTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || orangeTribbleRect.Top < 0)
+                    tribbleOrangeSpeed.Y *= -1;
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.E))
+                    screen = Screen.End;
+            }
+            else if (screen == Screen.End)
+            {
+                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                    Exit();
+            }
 
             base.Update(gameTime);
         }
@@ -128,14 +160,35 @@ namespace Monogame_Lesson_3___Animation
             GraphicsDevice.Clear(Color.AntiqueWhite);
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(spaceshipTexture, spaceshipRect, Color.White);
-            _spriteBatch.Draw(tribbleGreyTexture, greyTribbleRect, Color.White);
-            _spriteBatch.Draw(tribbleBrownTexture, brownTribbleRect, Color.White);
-            _spriteBatch.Draw(tribbleCreamTexture, creamTribbleRect, Color.White);
-            _spriteBatch.Draw(tribbleOrangeTexture, orangeTribbleRect, Color.White);           
+            if (screen == Screen.Intro)
+            {
+                _spriteBatch.Draw(tribbleIntroTexture, new Rectangle(0, 0, 800, 500), Color.White);
+                _spriteBatch.DrawString(instructFont, "Tribble Game", new Vector2(310, 515), Color.Black);
+                _spriteBatch.DrawString(instructFont, "How To Play: Click to Enter and then watch the Tribbles go!", new Vector2(40, 550), Color.Black);
+            }
+            else if (screen == Screen.TribbleYard)
+            {
+                _spriteBatch.Draw(spaceshipTexture, spaceshipRect, Color.White);
+                _spriteBatch.Draw(tribbleGreyTexture, greyTribbleRect, Color.White);
+                _spriteBatch.Draw(tribbleBrownTexture, brownTribbleRect, Color.White);
+                _spriteBatch.Draw(tribbleCreamTexture, creamTribbleRect, Color.White);
+                _spriteBatch.Draw(tribbleOrangeTexture, orangeTribbleRect, Color.White);
+                _spriteBatch.DrawString(instructFont, "Press E to Leave the Tribbles", new Vector2(440, 570), Color.Black);
+
+            }
+            else if (screen == Screen.End)
+            {
+                _spriteBatch.DrawString(instructFont, "Press Escape to Exit", new Vector2(280, 290), Color.Black);
+            }
             _spriteBatch.End();
 
             base.Draw(gameTime);
+
+            //To Do:
+            //add music
+            //fix tribble bounce sound and apply to all
+            //add and image for end screen
+            //hand in
         }
     }
 }
