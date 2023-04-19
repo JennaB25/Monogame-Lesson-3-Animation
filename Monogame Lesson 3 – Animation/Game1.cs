@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -26,6 +27,8 @@ namespace Monogame_Lesson_3___Animation
         Vector2 tribbleOrangeSpeed;
         Texture2D spaceshipTexture;
         Rectangle spaceshipRect;
+        Texture2D spaceship2Texture;
+        Rectangle spaceship2Rect;
         int randomX;
         int randomY;
         int randomX2;
@@ -35,8 +38,10 @@ namespace Monogame_Lesson_3___Animation
         int randomX4;
         int randomY4;
         SoundEffect tribbleCoo;
+        SoundEffect music;
         SoundEffectInstance tribbleCooSEI;
         private SpriteFont instructFont;
+        SoundEffectInstance musicSEI;        
         enum Screen
         {
             Intro,
@@ -80,7 +85,8 @@ namespace Monogame_Lesson_3___Animation
             orangeTribbleRect = new Rectangle(randomX4, randomY4, 100, 100);
             tribbleOrangeSpeed = new Vector2(2, 4);
             spaceshipRect = new Rectangle(0, 0, 803, 603);
-            screen = Screen.Intro;
+            spaceship2Rect = new Rectangle(0, 0, 803, 603);
+            screen = Screen.Intro;           
 
             base.Initialize();
         }
@@ -95,10 +101,14 @@ namespace Monogame_Lesson_3___Animation
             tribbleCreamTexture = Content.Load<Texture2D>("tribbleCream");
             tribbleOrangeTexture = Content.Load<Texture2D>("tribbleOrange");
             spaceshipTexture = Content.Load<Texture2D>("spaceship background");
+            spaceship2Texture = Content.Load<Texture2D>("spaceship");
             tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
+            music = Content.Load<SoundEffect>("background_music");
             tribbleIntroTexture = Content.Load<Texture2D>("tribble_intro");
-            tribbleCooSEI = tribbleCoo.CreateInstance();
-            tribbleCooSEI.Pause();
+            tribbleCooSEI = tribbleCoo.CreateInstance();           
+            musicSEI = music.CreateInstance();
+            musicSEI.IsLooped = true;
+            musicSEI.Play();
 
         }
 
@@ -135,8 +145,7 @@ namespace Monogame_Lesson_3___Animation
                 {
                     tribbleCreamSpeed.Y *= -1;
                     tribbleCooSEI.Play();
-                }
-
+                }               
                 orangeTribbleRect.X += (int)tribbleOrangeSpeed.X;
                 orangeTribbleRect.Y += (int)tribbleOrangeSpeed.Y;
                 if (orangeTribbleRect.Right > _graphics.PreferredBackBufferWidth || orangeTribbleRect.Left < 0)
@@ -178,17 +187,17 @@ namespace Monogame_Lesson_3___Animation
             }
             else if (screen == Screen.End)
             {
-                _spriteBatch.DrawString(instructFont, "Press Escape to Exit", new Vector2(280, 290), Color.Black);
+                _spriteBatch.Draw(spaceship2Texture, spaceship2Rect, Color.White);
+                _spriteBatch.DrawString(instructFont, "Press Escape to Exit", new Vector2(280, 290), Color.White);
             }
             _spriteBatch.End();
 
             base.Draw(gameTime);
 
             //To Do:
-            //add music
-            //fix tribble bounce sound and apply to all
-            //add and image for end screen
-            //hand in
+            //add music file
+            //fix tribble bounce sound and apply to all           
+            //hand in three assignments
         }
     }
 }

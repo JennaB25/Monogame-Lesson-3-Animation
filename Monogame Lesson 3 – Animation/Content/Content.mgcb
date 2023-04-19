@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin background_music.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:background_music.wav
+
 #begin Instructions.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -31,6 +37,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:spaceship background.png
+
+#begin spaceship.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:spaceship.jpg
 
 #begin tribble_coo.wav
 /importer:WavImporter
