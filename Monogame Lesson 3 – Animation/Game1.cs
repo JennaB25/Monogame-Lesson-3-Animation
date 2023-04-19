@@ -143,8 +143,9 @@ namespace Monogame_Lesson_3___Animation
                 creamTribbleRect.Y += (int)tribbleCreamSpeed.Y;
                 if (creamTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || creamTribbleRect.Top < 0)
                 {
-                    tribbleCreamSpeed.Y *= -1;
-                    tribbleCooSEI.Play();
+                    tribbleCooSEI.Pause();
+                    //change back to play after testing
+                    tribbleCreamSpeed.Y *= -1;                    
                 }               
                 orangeTribbleRect.X += (int)tribbleOrangeSpeed.X;
                 orangeTribbleRect.Y += (int)tribbleOrangeSpeed.Y;
@@ -195,7 +196,7 @@ namespace Monogame_Lesson_3___Animation
             base.Draw(gameTime);
 
             //To Do:
-            //add music file
+            //add music file (change previous one)
             //fix tribble bounce sound and apply to all           
             //hand in three assignments
         }
