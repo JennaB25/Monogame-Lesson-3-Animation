@@ -85,8 +85,12 @@ namespace Monogame_Lesson_3___Animation
             orangeTribbleRect = new Rectangle(randomX4, randomY4, 100, 100);
             tribbleOrangeSpeed = new Vector2(2, 4);
             spaceshipRect = new Rectangle(0, 0, 803, 603);
-            spaceship2Rect = new Rectangle(0, 0, 803, 603);
-            screen = Screen.Intro;           
+            spaceship2Rect = new Rectangle(0, 0, 803, 603); 
+            tribbleCooSEI = tribbleCoo.CreateInstance();
+            musicSEI = music.CreateInstance();
+            musicSEI.IsLooped = true;
+            screen = Screen.Intro;
+            
 
             base.Initialize();
         }
@@ -105,11 +109,8 @@ namespace Monogame_Lesson_3___Animation
             tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
             music = Content.Load<SoundEffect>("background_music");
             tribbleIntroTexture = Content.Load<Texture2D>("tribble_intro");
-            tribbleCooSEI = tribbleCoo.CreateInstance();           
-            musicSEI = music.CreateInstance();
-            musicSEI.IsLooped = true;
-            musicSEI.Play();
-
+            
+            
         }
 
         protected override void Update(GameTime gameTime)
@@ -126,7 +127,9 @@ namespace Monogame_Lesson_3___Animation
 
             }
             else if (screen == Screen.TribbleYard)
-            {
+            {             
+                musicSEI.Stop();
+
                 greyTribbleRect.X += (int)tribbleGreySpeed.X;
                 greyTribbleRect.Y += (int)tribbleGreySpeed.Y;
                 if (greyTribbleRect.Right > _graphics.PreferredBackBufferWidth || greyTribbleRect.Left < 0)
@@ -143,7 +146,7 @@ namespace Monogame_Lesson_3___Animation
                 creamTribbleRect.Y += (int)tribbleCreamSpeed.Y;
                 if (creamTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || creamTribbleRect.Top < 0)
                 {
-                    tribbleCooSEI.Pause();
+                    tribbleCooSEI.Play();
                     //change back to play after testing
                     tribbleCreamSpeed.Y *= -1;                    
                 }               
