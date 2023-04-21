@@ -213,6 +213,7 @@ namespace Monogame_Lesson_3___Animation
 
             base.Draw(gameTime);
 
+            //
         }
     }
 }
