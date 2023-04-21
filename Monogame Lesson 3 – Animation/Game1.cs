@@ -2,13 +2,16 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Monogame_Lesson_3___Animation
 {
     public class Game1 : Game
     {
-        Random genorator = new Random();
+        Random generator = new Random();
         Texture2D tribbleIntroTexture;
         Texture2D tribbleGreyTexture;
         Rectangle greyTribbleRect;
@@ -65,14 +68,14 @@ namespace Monogame_Lesson_3___Animation
             _graphics.ApplyChanges();
             this.Window.Title = "Bouncing Tribbles";
 
-            randomX = (genorator.Next(0, 700));
-            randomY = (genorator.Next(0, 500));
-            randomX2 = (genorator.Next(0, 700));
-            randomY2 = (genorator.Next(0, 500));
-            randomX3 = (genorator.Next(0, 700));
-            randomY3 = (genorator.Next(0, 500));
-            randomX4 = (genorator.Next(0, 700));
-            randomY4 = (genorator.Next(0, 500));
+            randomX = (generator.Next(0, 700));
+            randomY = (generator.Next(0, 500));
+            randomX2 = (generator.Next(0, 700));
+            randomY2 = (generator.Next(0, 500));
+            randomX3 = (generator.Next(0, 700));
+            randomY3 = (generator.Next(0, 500));
+            randomX4 = (generator.Next(0, 700));
+            randomY4 = (generator.Next(0, 500));
             greyTribbleRect = new Rectangle(randomX, randomY, 100, 100);
             tribbleGreySpeed = new Vector2(2, 2);
             brownTribbleRect = new Rectangle(randomX2, randomY2, 100, 100);
@@ -83,6 +86,9 @@ namespace Monogame_Lesson_3___Animation
             tribbleOrangeSpeed = new Vector2(2, 4);
             spaceshipRect = new Rectangle(0, 0, 803, 603);
             spaceship2Rect = new Rectangle(0, 0, 803, 603);
+            tribbleCooSEI = tribbleCoo.CreateInstance();
+            musicSEI = music.CreateInstance();
+            musicSEI.IsLooped = true;
             screen = Screen.Intro;
 
 
@@ -103,10 +109,6 @@ namespace Monogame_Lesson_3___Animation
             tribbleCoo = Content.Load<SoundEffect>("tribble_coo");
             music = Content.Load<SoundEffect>("background_music");
             tribbleIntroTexture = Content.Load<Texture2D>("tribble_intro");
-            tribbleCooSEI = tribbleCoo.CreateInstance();
-            musicSEI = music.CreateInstance();
-            musicSEI.IsLooped = true;
-            musicSEI.Play();
 
 
         }
@@ -126,51 +128,34 @@ namespace Monogame_Lesson_3___Animation
             }
             else if (screen == Screen.TribbleYard)
             {
+                musicSEI.Stop();
 
                 greyTribbleRect.X += (int)tribbleGreySpeed.X;
                 greyTribbleRect.Y += (int)tribbleGreySpeed.Y;
                 if (greyTribbleRect.Right > _graphics.PreferredBackBufferWidth || greyTribbleRect.Left < 0)
-                {
-                    tribbleCooSEI.Play();
                     tribbleGreySpeed.X *= -1;
-                }
-
                 if (greyTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || greyTribbleRect.Top < 0)
-                {
-                    tribbleCooSEI.Play();
                     tribbleGreySpeed.Y *= -1;
-                }
-
 
                 brownTribbleRect.X += (int)tribbleBrownSpeed.X;
                 brownTribbleRect.Y += (int)tribbleBrownSpeed.Y;
                 if (brownTribbleRect.Right > (_graphics.PreferredBackBufferWidth + 100) || brownTribbleRect.Left < -100)
-                {
-                    tribbleCooSEI.Play();
                     brownTribbleRect.X = -100;
-                }
 
                 creamTribbleRect.X += (int)tribbleCreamSpeed.X;
                 creamTribbleRect.Y += (int)tribbleCreamSpeed.Y;
                 if (creamTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || creamTribbleRect.Top < 0)
                 {
                     tribbleCooSEI.Play();
+                    //change back to play after testing
                     tribbleCreamSpeed.Y *= -1;
                 }
-
                 orangeTribbleRect.X += (int)tribbleOrangeSpeed.X;
                 orangeTribbleRect.Y += (int)tribbleOrangeSpeed.Y;
                 if (orangeTribbleRect.Right > _graphics.PreferredBackBufferWidth || orangeTribbleRect.Left < 0)
-                {
-                    tribbleCooSEI.Play();
                     tribbleOrangeSpeed.X *= -1;
-                }
-
                 if (orangeTribbleRect.Bottom > _graphics.PreferredBackBufferHeight || orangeTribbleRect.Top < 0)
-                {
-                    tribbleCooSEI.Play();
                     tribbleOrangeSpeed.Y *= -1;
-                }
                 if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.E))
                     screen = Screen.End;
             }
@@ -212,8 +197,7 @@ namespace Monogame_Lesson_3___Animation
             _spriteBatch.End();
 
             base.Draw(gameTime);
-
-            //
+           
         }
     }
 }
