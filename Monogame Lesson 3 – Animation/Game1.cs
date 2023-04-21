@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace Monogame_Part___3
+namespace Monogame_Lesson_3___Animation
 {
     public class Game1 : Game
     {
